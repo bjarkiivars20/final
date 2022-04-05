@@ -1,0 +1,69 @@
+class dll_node:
+    def __init__(self, value=None, prev=None, next=None):
+        self.value = value
+        self.prev = prev
+        self.next = next
+
+class WebHistory:
+    def __init__(self):
+        self.home_page = "ru.is"
+        self.head = dll_node("head sentinel, this string is for debugging and should not be printed")
+        self.tail = dll_node("tail sentinel, this string is for debugging and should not be printed")
+        self.curr_page = dll_node(self.home_page, self.head, self.tail)
+        self.head.next = self.curr_page
+        self.tail.prev = self.curr_page
+
+
+    def nav_to_website(self, web_url):
+        new_node = dll_node(web_url, self.curr_page, self.tail)
+        new_node.prev.next = new_node
+        self.tail.prev = new_node
+        self.curr_page = new_node
+
+    def press_back(self):
+        if self.curr_page.prev != self.head:
+            self.curr_page = self.curr_page.prev
+
+    def press_forward(self):
+        if self.curr_page.next != self.tail:
+            self.curr_page = self.curr_page.next
+
+    def nav_to_homepage(self):
+        self.nav_to_homepage(self.home_page)
+
+    def __str__(self):
+        ret_str = ""
+        temp_node = self.head.next
+        while temp_node != self.tail:
+            if temp_node == self.curr_page:
+                ret_str += ">" + temp_node.value + "< "
+            else:
+                ret_str += temp_node.value + " "
+            temp_node = temp_node.next
+        return ret_str
+
+if __name__ == "__main__":
+    w = WebHistory()
+    print(w)
+    w.nav_to_website("google.com")
+    print(w)
+    w.nav_to_website("wikipedia.com")
+    print(w)
+    w.nav_to_website("ruv.is")
+    print(w)
+    w.nav_to_website("reddit.com")
+    print(w)
+    w.press_back()
+    print(w)
+    w.press_back()
+    print(w)
+    w.press_back()
+    print(w)
+    w.nav_to_website("visir.is")
+    print(w)
+    w.press_forward()
+    print(w)
+    w.press_back()
+    print(w)
+
+        
